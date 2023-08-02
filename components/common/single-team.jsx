@@ -4,7 +4,7 @@ import React from 'react';
 const SingleTeam = ({ team, memberPosition }) => {
   const { _id, photo, name, instagram } = team;
   return (
-    <div className="col-xl-4 col-lg-4 col-md-6  wow tpfadeUp"
+    <div className={`${team.periodeId.periode_year == "2022-2023" ? 'col-xl-3 col-lg-3 col-md-6' : 'col-xl-4 col-lg-4 col-md-6'}  wow tpfadeUp`}
       data-wow-duration=".3s" data-wow-delay=".5s">
       <div className="tpteam mb-30">
         <div className="tpteam__shape-1">

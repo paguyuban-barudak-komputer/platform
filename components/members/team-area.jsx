@@ -83,7 +83,8 @@ const TeamArea = () => {
                     </div>
                   </div>
                   <div className="row">
-                    {memberList.map((team) => team.structuralId.name == structural.name && <SingleTeam key={team._id} team={team} memberPosition={team.memberPositionId.name} />)}
+                    {memberList.map((team) => team.structuralId.name == structural.name && team.periodeId.periode_year == latestPeriodeList && (team.periodeId.periode_year == "2022-2023" ? (team.memberPositionId.name != "Sekretaris Umum 2" && team.memberPositionId.name != "Bendahara Umum 2"): team)
+                     && <SingleTeam key={team._id} team={team} memberPosition={team.memberPositionId.name} />)}
                   </div>
                 </div>
                 ))}
