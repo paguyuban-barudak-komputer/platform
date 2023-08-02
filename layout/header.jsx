@@ -12,14 +12,14 @@ const Header = () => {
         <div id="header-sticky" className={`tp-header-area-two header-transparent header-space-three ${headerSticky ? 'header-sticky' : ''}`}>
           <div className="container-fluid">
             <div className="row align-items-center">
-              <div className="col-xxl-3 col-xl-3 col-lg-3">
+              <div className="col-xxl-2 col-xl-2 col-lg-3">
                 <div className="tp-logo text-start">
                   <Link href="/">
                     <img src="/assets/img/logo/pbk-nav.webp" alt="" />
                   </Link>
                 </div>
               </div>
-              <div className="col-xxl-5 col-xl-6 col-lg-6">
+              <div className="col-xxl-6 col-xl-7 col-lg-6">
                 <div className="tp-main-menu tp-menu-black text-center">
                   <nav id="mobile-menu">
                     {/* nav menus start */}
