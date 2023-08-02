@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import React from 'react';
+import { useCallback, useEffect, useState, React, Fragment } from 'react';
 import useModal from '../../hooks/use-modal';
 import VideoModal from '../common/modals/modal-video';
+import { getSettings } from '../../services/settings';
 
 const hero_contents = {
   shapes: [
@@ -17,16 +18,33 @@ const hero_contents = {
   hashtag: "#PBK_FKOM_BANGKIT_KEMBALI",
   hero_img: '/assets/img/logo/logo-pbk.webp',
   video_title: 'Selayang Pandang',
-  video_id: 'LJbkLdtEW00',
 }
 
-const { hero_img, highlight_text, shapes, tagline, short_text, hashtag, title, video_title, video_id } = hero_contents;
+const { hero_img, highlight_text, shapes, tagline, short_text, hashtag, title, video_title } = hero_contents;
 
 const HeroArea = () => {
   const { isVideoOpen, setIsVideoOpen } = useModal();
+  const [settingList, setSettingList] = useState([]);
+
+  const getSettingList = useCallback(async () => {
+    const data = await getSettings();
+    let result = [];
+
+    result = {
+      site_instagram_account: data.filter((d) => d.key == "site_instagram_account")[0].value,
+      site_youtube_channel: data.filter((d) => d.key == "site_youtube_channel")[0].value,
+      site_introduce_video_id: data.filter((d) => d.key == "site_introduce_video_id")[0].value
+    }
+
+    setSettingList(result);
+  }, [getSettings]);
+
+  useEffect(() => {
+    getSettingList();
+  }, []);
 
   return (
-    <React.Fragment>
+    <Fragment>
     <div className="tp-hero-area tp-hero-border p-relative">
       {shapes.map((s, i) => (
         <div key={i} className={`bp-hero-shape-${i + 1} d-none d-xxl-block`}>
@@ -59,9 +77,9 @@ const HeroArea = () => {
             </div>
             <div className="tp-hero-social pb-90 pt-50 wow tpfadeUp">
                 <div className="tp-hero-social bp-hero-social">
-                    <Link className="social-icon-1" href="instagram.com" target="_blank"><i
+                    <Link className="social-icon-1" href={`https://instagram.com/${settingList.site_instagram_account}`} target="_blank"><i
                             className="fab fa-instagram social-icon-3"></i><span>Instagram</span></Link>
-                    <Link className="social-icon-3" href="youtube.com"
+                    <Link className="social-icon-3" href={`https://youtube.com/${settingList.site_youtube_channel}`}
                         target="_blank"><i className="fab fa-youtube social-icon-3"></i><span>Youtube</span></Link>
                 </div>
             </div>
@@ -80,9 +98,9 @@ const HeroArea = () => {
     </div>
 
      {/* video modal start */}
-        <VideoModal isVideoOpen={isVideoOpen} setIsVideoOpen={setIsVideoOpen} videoId={video_id} />
+        <VideoModal isVideoOpen={isVideoOpen} setIsVideoOpen={setIsVideoOpen} videoId={`${settingList.site_introduce_video_id}`} />
     {/* video modal end */}
-    </React.Fragment>
+    </Fragment>
   );
 };
 

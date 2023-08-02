@@ -1,25 +1,16 @@
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
 
-const social_links=[
-  {link: 'http://instagram.com', target: '_blank', icon: 'fab fa-instagram'},
-  {link: 'https://www.youtube.com/', target: '_blank', icon: 'fab fa-youtube'}
-]
+const SocialLinks = ({socialSite}) => {
 
-const hero_socials = [
-  { num: 1,link:'http://facebook.com',target: '_blank', icon: 'fab fa-facebook-f social-icon-1', title: 'Facebook' },
-  { num: 3,link:'https://www.youtube.com/',target: '_blank',icon: 'fab fa-youtube social-icon-3', title: 'Youtube' },
-  { num: 2,link:'http://twitter.com',target: '_blank',icon:'fab fa-twitter social-icon-2', title: 'Twitter' },
-]
+  const urlInstagram = socialSite.site_instagram_account;
+  const urlYoutube = socialSite.site_youtube_channel;
+  
+  const social_links=[
+    {link: `${urlInstagram}`, target: '_blank', icon: 'fab fa-instagram'},
+    {link: `${urlYoutube}`, target: '_blank', icon: 'fab fa-youtube'}
+  ]
 
-export const HeroSocials = ({hide_title=false}) => {
-  return (
-    <>{hero_socials.map((l, i) => <Link key={i} href={l.link} className={`social-icon-${l.num}`}
-    target={l.target ? l.target:''}><i className={l.icon}></i>{hide_title?'':l.title}</Link>)}</>
-  );
-};
-
-const SocialLinks = () => {
   return (
     <>{social_links.map((l, i) => <Link key={i} href={l.link}
     target={l.target ? l.target:''}><i className={l.icon}></i></Link>)}</>

@@ -3,29 +3,45 @@ import Link from 'next/link';
 import useModal from '../../hooks/use-modal';
 import VideoModal from '../common/modals/modal-video';
 import { getQuote } from '../../services/quotes';
+import { getSettings } from '../../services/settings';
 
 const contents = {
   title:'Paguyuban Barudak Komputer',
   video_title:'See Our Introduce Video',
-  video_id:'8D6b3McyhhU',
   right_text_1:"PBK Merupakan UKM, Unit Kegiatan Mahasiswa ini bernama Paguyuban Barudak Komputer Fakultas Ilmu Komputer Universitas Kuningan yang disingkat PBK FKOM UNIKU.",
   right_text_2:"Disini kalian bisa mengeksplor lebih pengetahuan kalian, bukan hanya bidang akademisi tapi diluar akademisnya juga.",
-  about_img:'/assets/img/breadcrum/ab-1.2.jpg',
 }
-const {about_img,right_text_1,right_text_2,title,video_id,video_title} = contents;
+const {right_text_1,right_text_2,title,video_title} = contents;
 
 const AboutArea = () => {
   const { isVideoOpen, setIsVideoOpen } = useModal();
   const [quoteList, setQuoteList] = useState([]);
+  const [settingList, setSettingList] = useState([]);
+
   const API_PHOTO_MEMBER = process.env.NEXT_PUBLIC_PHOTO_MEMBER;
+  const API_ABOUT_PHOTO= process.env.NEXT_PUBLIC_ABOUT_PHOTO;
 
   const getQuoteList = useCallback(async () => {
-  const data = await getQuote();
+    const data = await getQuote();
     setQuoteList(data);
   }, [getQuote]);
 
+  const getSettingList = useCallback(async () => {
+      const data = await getSettings();
+
+      let result = {};
+
+      result = {
+        site_about_photo: data.filter((d) => d.key == "site_about_photo")[0].value,
+        site_introduce_video_id: data.filter((d) => d.key == "site_introduce_video_id")[0].value
+      }
+
+      setSettingList(result);
+    }, [getSettings]);
+
   useEffect(() => {
     getQuoteList();
+    getSettingList();
   }, []);
 
   return (
@@ -71,7 +87,7 @@ const AboutArea = () => {
             </div>
             <div className="col-xl-6 col-lg-6 wow tpfadeRight" data-wow-duration=".5s" data-wow-delay=".7s">
               <div className="ac-testimonial-right">
-                <img src={about_img} alt="" />
+                <img src={`${API_ABOUT_PHOTO}/${settingList.site_about_photo}`} alt="" />
               </div>
             </div>
           </div>
@@ -79,7 +95,7 @@ const AboutArea = () => {
       </div>
 
       {/* video modal start */}
-      <VideoModal isVideoOpen={isVideoOpen} setIsVideoOpen={setIsVideoOpen} videoId={video_id} />
+      <VideoModal isVideoOpen={isVideoOpen} setIsVideoOpen={setIsVideoOpen} videoId={settingList.site_introduce_video_id} />
       {/* video modal end */}
     </>
   );

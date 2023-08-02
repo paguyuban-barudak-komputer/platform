@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import React from 'react';
+import { useCallback, useEffect, useState, React } from 'react';
 import SocialLinks from './social-links';
 import CopyrightArea from './copyright-area';
+import { getSettings } from '../services/settings';
 
 const footer_contents = {
   shapes: ['hero-shape-5.1.png', 'testimonial-shape-5.4.png'],
@@ -33,13 +34,30 @@ const footer_contents = {
       widget_lists: ['Universitas Kuningan', 'Fakultas Ilmu Komputer Universitas Kuningan']
     },
   ],
-  subscribe_text: 'Exerci tation ullamcorper suscipit lobortis nisl aliquip ex ea commodo',
   copy_right_text: <>Copyright © {new Date().getFullYear()} Paguyuban Barudak Komputer. All Rights Reserved</>,
 }
 const { copy_right_text, footer_widgets, logo, widget_desc, shapes }
   = footer_contents;
 
 const Footer = () => {
+  const [settingList, setSettingList] = useState([]);
+
+  const getSettingList = useCallback(async () => {
+    const data = await getSettings();
+    let result = [];
+
+    result = {
+      site_instagram_account: data.filter((d) => d.key == "site_instagram_account")[0].value,
+      site_youtube_channel: data.filter((d) => d.key == "site_youtube_channel")[0].value
+    }
+
+    setSettingList(result);
+  }, [getSettings]);
+
+  useEffect(() => {
+    getSettingList();
+  }, []);
+
   return (
     <footer>
       <div className="tp-footer-area pt-130 pb-30 p-relative">
@@ -64,7 +82,7 @@ const Footer = () => {
                   <p>{widget_desc}</p>
                 </div>
                 <div className="tp-footer-widget__social-link tp-footer-widget__social-link-2 ">
-                  <SocialLinks />
+                  <SocialLinks socialSite={settingList} />
                 </div>
               </div>
             </div>
